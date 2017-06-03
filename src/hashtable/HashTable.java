@@ -11,30 +11,26 @@ import java.util.Set;
  */
 public class HashTable<K, V> implements Map<K, V> {
 
-    private ArrayList<ArrayList<Entry<K, V>>> table;
+    private class Elem{
+        Entry<K,V> curEntry = null, nextEntry = null;
+    }
+
+    private Elem[] table;
     private int size;
-    private final float loadFactor;
-    private final int capacity;
+    private float loadFactor;
+    private int capacity;
     private int treshold;
 
     public HashTable() {
-        table = new ArrayList<>(11);
-        capacity = 11;
-        size = 0;
-        loadFactor = 0.75f;
-        treshold = (int) (capacity * loadFactor);
+        new HashTable(11, 0.75f);
     }
 
     public HashTable(int initialCapacity) {
-        table = new ArrayList<>(initialCapacity);
-        capacity = initialCapacity;
-        size = 0;
-        loadFactor = 0.75f;
-        treshold = (int) (capacity * loadFactor);
+        new HashTable(initialCapacity, 0.75f);
     }
 
     public HashTable(int initialCapacity, float loadFactor) {
-        table = new ArrayList<>(initialCapacity);
+        table = (Elem[]) new Object[initialCapacity];
         capacity = initialCapacity;
         size = 0;
         this.loadFactor = loadFactor;
@@ -57,7 +53,7 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        int index = hash(key.hashCode());
+        /*int index = hash(key.hashCode());
         ArrayList<Entry<K, V>> list = table.get(index);
         if (list == null) {
             return false;
@@ -67,7 +63,8 @@ public class HashTable<K, V> implements Map<K, V> {
                 return true;
             }
         }
-        return false;
+        return false;*/
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -77,14 +74,15 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
-        int index = hash(key.hashCode());
+        /*int index = hash(key.hashCode());
         ArrayList<Entry<K, V>> list = table.get(index);
         for (Entry<K, V> e : list) {
             if (e.getKey().equals(key) && e.hashCode() == key.hashCode()) {
                 return e.getValue();
             }
         }
-        return null;
+        return null;*/
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
