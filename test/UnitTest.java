@@ -32,10 +32,27 @@ public class UnitTest {
     }
 
     @Test
-    public void testContainsValue(){
+    public void TestPut() {
+        HashTable<Integer, String> table = new HashTable<>();
+        String value = table.put(10, "Alex");
+        if (value != null) {
+            fail("Error");
+        }
+        value = table.put(10, "Alexey");
+        if (!value.equals("Alex")) {
+            fail("Error");
+        }
+        value = table.put(20, "Vasya");
+        if (value != null) {
+            fail("Error");
+        }
+    }
+
+    @Test
+    public void testContainsValue() {
         HashTable<Integer, String> table = new HashTable<>();
         table.put(10, "Cat");
-        if(!table.containsValue("Cat")){
+        if (!table.containsValue("Cat")) {
             fail("Error");
         }
     }
