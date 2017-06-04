@@ -30,4 +30,13 @@ public class UnitTest {
             fail("Error");
         }
     }
+
+    @Test
+    public void testContainsValue(){
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(10, "Cat");
+        if(!table.containsValue("Cat")){
+            fail("Error");
+        }
+    }
 }
