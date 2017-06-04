@@ -1,5 +1,7 @@
 package hashtable;
 
+import com.sun.prism.impl.Disposer;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class HashTable<K, V> implements Map<K, V> {
     private int size;
     private float loadFactor;
     private int capacity;
-    private int treshold;
+    private int threshold;
 
     public HashTable() {
         this(11, 0.75f);
@@ -59,7 +61,7 @@ public class HashTable<K, V> implements Map<K, V> {
         capacity = initialCapacity;
         size = 0;
         this.loadFactor = loadFactor;
-        treshold = (int) (capacity * loadFactor);
+        threshold = (int) (capacity * loadFactor);
     }
 
     private int hash(int hash) {
@@ -127,7 +129,7 @@ public class HashTable<K, V> implements Map<K, V> {
             oldRecord = oldRecord.next;
         }
         oldRecord.next = new Record<>(value, key);
-        return oldRecord.getValue();
+        return null;
     }
 
     @Override
@@ -158,6 +160,34 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void rehash(){
+        int oldCapacity = table.length;
+        int newCapacity = oldCapacity*2;
+
+        if(newCapacity - Integer.MAX_VALUE > 0){
+            if(oldCapacity == Integer.MAX_VALUE)
+                return;
+            newCapacity = Integer.MAX_VALUE;
+        }
+
+        Record<K, V>[] oldMap = table;
+        Record<K, V>[] newMap = new Record[newCapacity];
+        threshold = (int)Math.min(newCapacity * loadFactor, Integer.MAX_VALUE);
+
+        table = newMap;
+        for(int i = oldCapacity - 1; i > 0; i--){
+            for (Record<K,V> old = oldMap[i]; old != null ; ) {
+                Record<K,V> cur = old;
+                old = old.next;
+
+                int index = cur.getKey().hashCode() % newCapacity;
+                cur.next = newMap[index];
+                newMap[index] = cur;
+            }
+        }
+
     }
 
 }
