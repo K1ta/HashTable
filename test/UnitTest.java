@@ -2,7 +2,6 @@
 import hashtable.HashTable;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertArrayEquals;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -79,7 +78,6 @@ public class UnitTest {
     }
 
     @Test
-<<<<<<< HEAD
     public void testRemove() {
         HashTable<Integer, String> table = new HashTable<>();
         table.put(10, "Cat");
@@ -122,10 +120,11 @@ public class UnitTest {
         table.put(2110, "Fish");
 
         Set<Integer> setAcc = table.keySet();
-        Set<Integer> setExp = new TreeSet<>(Arrays.asList(10,1,100,2110));
+        Set<Integer> setExp = new TreeSet<>(Arrays.asList(10, 1, 100, 2110));
 
-        assertArrayEquals(setExp.toArray(),setAcc.toArray());
-=======
+        assertArrayEquals(setExp.toArray(), setAcc.toArray());
+    }
+
     public void testIsEmpty() {
         HashTable<Integer, String> table = new HashTable<>();
         if (!table.isEmpty()) {
@@ -174,6 +173,5 @@ public class UnitTest {
         table.put(2, "C");
         String[] exp = new String[]{"A", "C", "B"};
         assertArrayEquals(exp, table.values().toArray());
->>>>>>> master
     }
 }
