@@ -38,5 +38,20 @@ public class UnitTest {
         if(!table.containsValue("Cat")){
             fail("Error");
         }
+        if(table.containsValue("Dog")){
+            fail("Error");
+        }
+    }
+
+    @Test
+    public void testContainsKey(){
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(10, "Cat");
+        if(!table.containsKey(10)){
+            fail("Error");
+        }
+        if(table.containsKey(11)){
+            fail("Error");
+        }
     }
 }
