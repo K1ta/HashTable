@@ -58,7 +58,7 @@ public class HashTable<K, V> implements Map<K, V> {
     }
 
     public HashTable(int initialCapacity, float loadFactor) {
-        table = new Record<?,?>[initialCapacity];
+        table = new Record<?, ?>[initialCapacity];
         capacity = initialCapacity;
         size = 0;
         this.loadFactor = loadFactor;
@@ -92,7 +92,7 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(Object value) {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < capacity; i++) {
             for (Record<?, ?> r = table[i]; r != null; r = r.next) {
                 if (r.getValue().equals(value)) {
                     return true;
@@ -132,6 +132,11 @@ public class HashTable<K, V> implements Map<K, V> {
                 return oldValue;
             }
             oldRecord = oldRecord.next;
+        }
+        if (oldRecord.key.equals(key)) {
+            V oldValue = oldRecord.value;
+            oldRecord.value = value;
+            return oldValue;
         }
         oldRecord.next = new Record(value, key);
         size++;
@@ -177,7 +182,7 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < capacity; i++) {
             table[i] = null;
         }
         size = 0;
@@ -186,7 +191,7 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public Set<K> keySet() {
         Set<K> set = new TreeSet<>();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < capacity; i++) {
             for (Record<?, ?> r = table[i]; r != null; r = r.next) {
                 set.add((K) r.getKey());
             }
@@ -197,7 +202,7 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public Collection<V> values() {
         List<V> list = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < capacity; i++) {
             for (Record<?, ?> r = table[i]; r != null; r = r.next) {
                 list.add((V) r.getValue());
             }
@@ -208,7 +213,7 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
         Set<Entry<K, V>> set = new TreeSet<>();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < capacity; i++) {
             for (Record<?, ?> r = table[i]; r != null; r = r.next) {
                 set.add((Entry<K, V>) r);
             }
