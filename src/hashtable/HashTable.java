@@ -131,10 +131,7 @@ public class HashTable<K, V> implements Map<K, V> {
             oldRecord = oldRecord.next;
         }
         oldRecord.next = new Record<>(value, key);
-<<<<<<< HEAD
-=======
         size++;
->>>>>>> master
         return null;
     }
 
