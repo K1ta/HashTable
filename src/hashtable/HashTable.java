@@ -79,22 +79,51 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = hash(key.hashCode());
+        for (Record<K, V> e = table[index]; e != null; e = e.next) {
+            if (e.getKey().equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i < size(); i++) {
+            for (Record<K, V> e = table[i]; e != null; e = e.next) {
+                if (e.getValue().equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
     public V get(Object key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = hash(key.hashCode());
+        for (Record<K, V> e = table[index]; e != null; e = e.next) {
+            if (e.getKey().equals(key)) {
+                return e.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
     public V put(K key, V value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = hash(key.hashCode());
+        if (table[index] == null) {
+            table[index] = new Record<>(value, key);
+            return null;
+        }
+        Record<K, V> oldRecord = table[index];
+        while (oldRecord.next != null) {
+            oldRecord = oldRecord.next;
+        }
+        oldRecord.next = new Record<>(value, key);
+        return oldRecord.getValue();
     }
 
     @Override
