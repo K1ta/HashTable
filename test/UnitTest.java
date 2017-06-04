@@ -1,5 +1,6 @@
 
 import hashtable.HashTable;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertArrayEquals;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import java.util.TreeSet;
 public class UnitTest {
 
     @Test
-    public void TestGet() {
+    public void testGet() {
         HashTable<Integer, String> table = new HashTable<>();
         table.put(10, "Cat");
         String value = table.get(10);
@@ -37,7 +38,7 @@ public class UnitTest {
     }
 
     @Test
-    public void TestPut() {
+    public void testPut() {
         HashTable<Integer, String> table = new HashTable<>();
         String value = table.put(10, "Alex");
         if (value != null) {
@@ -60,24 +61,25 @@ public class UnitTest {
         if (!table.containsValue("Cat")) {
             fail("Error");
         }
-        if(table.containsValue("Dog")){
+        if (table.containsValue("Dog")) {
             fail("Error");
         }
     }
 
     @Test
-    public void testContainsKey(){
+    public void testContainsKey() {
         HashTable<Integer, String> table = new HashTable<>();
         table.put(10, "Cat");
-        if(!table.containsKey(10)){
+        if (!table.containsKey(10)) {
             fail("Error");
         }
-        if(table.containsKey(11)){
+        if (table.containsKey(11)) {
             fail("Error");
         }
     }
 
     @Test
+<<<<<<< HEAD
     public void testRemove() {
         HashTable<Integer, String> table = new HashTable<>();
         table.put(10, "Cat");
@@ -123,5 +125,55 @@ public class UnitTest {
         Set<Integer> setExp = new TreeSet<>(Arrays.asList(10,1,100,2110));
 
         assertArrayEquals(setExp.toArray(),setAcc.toArray());
+=======
+    public void testIsEmpty() {
+        HashTable<Integer, String> table = new HashTable<>();
+        if (!table.isEmpty()) {
+            fail("Error");
+        }
+        table.put(1, "A");
+        table.put(2, "B");
+        table.put(3, "C");
+        table.put(4, "Unexpected value");
+        if (table.isEmpty()) {
+            System.out.println("Error");
+        }
+        table.remove(1);
+        table.remove(2);
+        table.remove(3);
+        table.remove(4);
+        if (!table.isEmpty()) {
+            System.out.println("Error");
+        }
+        table.put(1, "Hello");
+        table.clear();
+        if (!table.isEmpty()) {
+            System.out.println("Error");
+        }
+    }
+
+    @Test
+    public void testSize() {
+        HashTable<Integer, String> table = new HashTable<>();
+        int expSize = 3;
+        table.put(1, "A");
+        table.put(2, "B");
+        table.put(3, "C");
+        table.put(4, "Unexpected value");
+        table.remove(2);
+        if (expSize != table.size()) {
+            fail("Error");
+        }
+    }
+
+    @Test
+    public void testValues() {
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(1, "A");
+        table.put(3, "B");
+        table.put(2, "C");
+        String[] exp = new String[]{"A", "C", "B"};
+        assertArrayEquals(exp, table.values().toArray());
+>>>>>>> master
     }
 }
