@@ -84,18 +84,18 @@ public class UnitTest {
         table.put(1, "Dog");
         table.put(100, "Fox");
         table.put(2110, "Fish");
-
         table.remove(1);
-        if(table.containsKey("Dog"))
+        if (table.containsKey("Dog")) {
             fail("Error");
-
+        }
         table.remove(2110);
-        if(table.containsKey("Fish"))
+        if (table.containsKey("Fish")) {
             fail("Error");
-
+        }
         table.remove(100);
-        if(table.containsKey("Fox"))
+        if (table.containsKey("Fox")) {
             fail("Error");
+        }
     }
 
     @Test
@@ -105,10 +105,10 @@ public class UnitTest {
         table.put(1, "Dog");
         table.put(100, "Fox");
         table.put(2110, "Fish");
-
         table.clear();
-        if(table.containsValue("Cat") || table.containsValue("Dog") || table.containsValue("Fox") || table.containsValue("Fish"))
+        if (table.containsValue("Cat") || table.containsValue("Dog") || table.containsValue("Fox") || table.containsValue("Fish")) {
             fail("Error");
+        }
     }
 
     @Test
@@ -118,10 +118,8 @@ public class UnitTest {
         table.put(1, "Dog");
         table.put(100, "Fox");
         table.put(2110, "Fish");
-
         Set<Integer> setAcc = table.keySet();
         Set<Integer> setExp = new TreeSet<>(Arrays.asList(10, 1, 100, 2110));
-
         assertArrayEquals(setExp.toArray(), setAcc.toArray());
     }
 
