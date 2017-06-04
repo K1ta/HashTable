@@ -4,6 +4,10 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * Created by cilci_000 on 04.06.2017.
  */
@@ -74,6 +78,53 @@ public class UnitTest {
     }
 
     @Test
+    public void testRemove() {
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(10, "Cat");
+        table.put(1, "Dog");
+        table.put(100, "Fox");
+        table.put(2110, "Fish");
+
+        table.remove(1);
+        if(table.containsKey("Dog"))
+            fail("Error");
+
+        table.remove(2110);
+        if(table.containsKey("Fish"))
+            fail("Error");
+
+        table.remove(100);
+        if(table.containsKey("Fox"))
+            fail("Error");
+    }
+
+    @Test
+    public void testClear() {
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(10, "Cat");
+        table.put(1, "Dog");
+        table.put(100, "Fox");
+        table.put(2110, "Fish");
+
+        table.clear();
+        if(table.containsValue("Cat") || table.containsValue("Dog") || table.containsValue("Fox") || table.containsValue("Fish"))
+            fail("Error");
+    }
+
+    @Test
+    public void testKeySet() {
+        HashTable<Integer, String> table = new HashTable<>();
+        table.put(10, "Cat");
+        table.put(1, "Dog");
+        table.put(100, "Fox");
+        table.put(2110, "Fish");
+
+        Set<Integer> setAcc = table.keySet();
+        Set<Integer> setExp = new TreeSet<>(Arrays.asList(10, 1, 100, 2110));
+
+        assertArrayEquals(setExp.toArray(), setAcc.toArray());
+    }
+
     public void testIsEmpty() {
         HashTable<Integer, String> table = new HashTable<>();
         if (!table.isEmpty()) {
