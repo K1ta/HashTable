@@ -1,6 +1,5 @@
 package hashtable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -48,11 +47,11 @@ public class HashTable<K, V> implements Map<K, V> {
     private int treshold;
 
     public HashTable() {
-        new HashTable(11, 0.75f);
+        this(11, 0.75f);
     }
 
     public HashTable(int initialCapacity) {
-        new HashTable(initialCapacity, 0.75f);
+        this(initialCapacity, 0.75f);
     }
 
     public HashTable(int initialCapacity, float loadFactor) {
@@ -120,6 +119,11 @@ public class HashTable<K, V> implements Map<K, V> {
         }
         Record<K, V> oldRecord = table[index];
         while (oldRecord.next != null) {
+            if (oldRecord.key.equals(key)) {
+                V oldValue = oldRecord.value;
+                oldRecord.value = value;
+                return oldValue;
+            }
             oldRecord = oldRecord.next;
         }
         oldRecord.next = new Record<>(value, key);
@@ -128,7 +132,7 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
