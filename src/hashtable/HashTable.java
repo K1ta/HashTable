@@ -1,8 +1,8 @@
 package hashtable;
 
-import com.sun.prism.impl.Disposer;
-
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -118,6 +118,10 @@ public class HashTable<K, V> implements Map<K, V> {
         int index = hash(key.hashCode());
         if (table[index] == null) {
             table[index] = new Record<>(value, key);
+            size++;
+            if (size > threshold) {
+                rehash();
+            }
             return null;
         }
         Record<K, V> oldRecord = table[index];
@@ -125,13 +129,15 @@ public class HashTable<K, V> implements Map<K, V> {
             if (oldRecord.key.equals(key)) {
                 V oldValue = oldRecord.value;
                 oldRecord.value = value;
-                size++;
                 return oldValue;
             }
             oldRecord = oldRecord.next;
         }
         oldRecord.next = new Record<>(value, key);
         size++;
+        if (size > threshold) {
+            rehash();
+        }
         return null;
     }
 
@@ -179,12 +185,24 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Set<K> set = new TreeSet<>();
+        for (int i = 0; i < size; i++) {
+            for (Record<K, V> r = table[i]; r != null; r = r.next) {
+                set.add(r.getKey());
+            }
+        }
+        return set;
     }
 
     @Override
     public Collection<V> values() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<V> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (Record<K, V> r = table[i]; r != null; r = r.next) {
+                list.add(r.getValue());
+            }
+        }
+        return list;
     }
 
     @Override
@@ -198,24 +216,25 @@ public class HashTable<K, V> implements Map<K, V> {
         return set;
     }
 
-    private void rehash(){
+    private void rehash() {
         int oldCapacity = table.length;
-        int newCapacity = oldCapacity*2;
+        int newCapacity = oldCapacity * 2;
 
-        if(newCapacity - Integer.MAX_VALUE > 0){
-            if(oldCapacity == Integer.MAX_VALUE)
+        if (newCapacity - Integer.MAX_VALUE > 0) {
+            if (oldCapacity == Integer.MAX_VALUE) {
                 return;
+            }
             newCapacity = Integer.MAX_VALUE;
         }
 
         Record<K, V>[] oldMap = table;
         Record<K, V>[] newMap = new Record[newCapacity];
-        threshold = (int)Math.min(newCapacity * loadFactor, Integer.MAX_VALUE);
+        threshold = (int) Math.min(newCapacity * loadFactor, Integer.MAX_VALUE);
 
         table = newMap;
-        for(int i = oldCapacity - 1; i > 0; i--){
-            for (Record<K,V> old = oldMap[i]; old != null ; ) {
-                Record<K,V> cur = old;
+        for (int i = oldCapacity - 1; i > 0; i--) {
+            for (Record<K, V> old = oldMap[i]; old != null;) {
+                Record<K, V> cur = old;
                 old = old.next;
 
                 int index = cur.getKey().hashCode() % newCapacity;
