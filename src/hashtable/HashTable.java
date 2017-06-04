@@ -5,6 +5,7 @@ import com.sun.prism.impl.Disposer;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -81,8 +82,8 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public boolean containsKey(Object key) {
         int index = hash(key.hashCode());
-        for (Record<K, V> e = table[index]; e != null; e = e.next) {
-            if (e.getKey().equals(key)) {
+        for (Record<K, V> r = table[index]; r != null; r = r.next) {
+            if (r.getKey().equals(key)) {
                 return true;
             }
         }
@@ -91,9 +92,9 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(Object value) {
-        for (int i = 0; i < size(); i++) {
-            for (Record<K, V> e = table[i]; e != null; e = e.next) {
-                if (e.getValue().equals(value)) {
+        for (int i = 0; i < size; i++) {
+            for (Record<K, V> r = table[i]; r != null; r = r.next) {
+                if (r.getValue().equals(value)) {
                     return true;
                 }
             }
@@ -104,9 +105,9 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
         int index = hash(key.hashCode());
-        for (Record<K, V> e = table[index]; e != null; e = e.next) {
-            if (e.getKey().equals(key)) {
-                return e.getValue();
+        for (Record<K, V> r = table[index]; r != null; r = r.next) {
+            if (r.getKey().equals(key)) {
+                return r.getValue();
             }
         }
         return null;
@@ -124,27 +125,59 @@ public class HashTable<K, V> implements Map<K, V> {
             if (oldRecord.key.equals(key)) {
                 V oldValue = oldRecord.value;
                 oldRecord.value = value;
+                size++;
                 return oldValue;
             }
             oldRecord = oldRecord.next;
         }
         oldRecord.next = new Record<>(value, key);
+<<<<<<< HEAD
+=======
+        size++;
+>>>>>>> master
         return null;
     }
 
     @Override
     public V remove(Object key) {
+        int index = hash(key.hashCode());
+        if (table[index] == null) {
+            return null;
+        }
+        Record<K, V> record = table[index];
+        if (record.getKey().equals(key)) {
+            V value = record.getValue();
+            table[index] = record.next;
+            size--;
+            return value;
+        }
+        Record<K, V> prevRecord = record;
+        while (record.next != null) {
+            record = record.next;
+            if (record.key.equals(key)) {
+                V value = record.value;
+                prevRecord.next = record.next;
+                size--;
+                return value;
+            }
+            prevRecord = record;
+        }
         return null;
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            put(e.getKey(), e.getValue());
+        }
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i < size; i++) {
+            table[i] = null;
+        }
+        size = 0;
     }
 
     @Override
@@ -159,7 +192,13 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Set<Entry<K, V>> set = new TreeSet<>();
+        for (int i = 0; i < size; i++) {
+            for (Record<K, V> r = table[i]; r != null; r = r.next) {
+                set.add(r);
+            }
+        }
+        return set;
     }
 
     private void rehash(){
