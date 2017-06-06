@@ -1,18 +1,17 @@
-
-import hashtable.HashTable;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+package hashtable;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
+ *
  * Created by cilci_000 on 04.06.2017.
  */
-public class UnitTest {
-
+public class HashTableTest {
+    
     @Test
     public void testGet() {
         HashTable<Integer, String> table = new HashTable<>();
@@ -172,4 +171,5 @@ public class UnitTest {
         String[] exp = new String[]{"A", "C", "B"};
         assertArrayEquals(exp, table.values().toArray());
     }
+    
 }
